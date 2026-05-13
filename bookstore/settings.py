@@ -17,6 +17,7 @@ Django settings for bookstore project.
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 # =========================
 # BASE
@@ -108,12 +109,19 @@ WSGI_APPLICATION = 'bookstore.wsgi.application'
 # DATABASE
 # =========================
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.parse(
+            os.getenv("DATABASE_URL")
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # =========================
 # PASSWORD VALIDATION
